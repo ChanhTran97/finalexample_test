@@ -10,6 +10,7 @@ import android.view.View
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_top_rate.*
 import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
@@ -38,11 +39,11 @@ class MainActivity : AppCompatActivity(){
 
     private fun addFirstFragment() {
         val nowPlayingFragment = NowPlayingFragment()
+        openFragment(nowPlayingFragment)
         mListener = nowPlayingFragment
         mListener.sendDataToFragment(movies)
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.flContainer, nowPlayingFragment)
-        fragmentTransaction.commit()
+        //nowPlayingFragment.movieAdapter.notifyDataSetChanged()
+
     }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -55,17 +56,17 @@ class MainActivity : AppCompatActivity(){
 
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.now_playing -> {
-                val nowPlayingFragment = NowPlayingFragment()
-                mListener = nowPlayingFragment
-                mListener.sendDataToFragment(movies)
-                openFragment(nowPlayingFragment)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.search_movie -> {
-                val intent = Intent(this, SearchMovieActivity:: class.java)
-                startActivity(intent)
-            }
+//            R.id.now_playing -> {
+//                val nowPlayingFragment = NowPlayingFragment()
+//                mListener = nowPlayingFragment
+//                mListener.sendDataToFragment(movies)
+//                openFragment(nowPlayingFragment)
+//                return@OnNavigationItemSelectedListener true
+//            }
+//            R.id.search_movie -> {
+//                val intent = Intent(this, SearchMovieActivity:: class.java)
+//                startActivity(intent)
+//            }
         }
         false
     }
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity(){
         pbLoading.visibility = View.VISIBLE
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("https://www.food2fork.com/api/get?key=fdbcae6f61c0ed7f252ec35be2fd561e&rId=35382")
+            .url("https://www.food2fork.com/api/search?key=e73c57efde785b199177c068778d720e&q=shredded%20chicken")
             .build()
 
         client.newCall(request)
@@ -95,16 +96,31 @@ class MainActivity : AppCompatActivity(){
                 override fun onResponse(call: Call, response: Response) {
                     val json = response.body()!!.string()
                     val jsonObject = JSONObject(json)
-                    val jsonDataMovie = jsonObject.get("recipe").toString()
+                    val jsonDataMovie = jsonObject.get("recipes").toString()
 
                     val collectionType = object : TypeToken<Collection<Movie>>(){}.type
 
-                    movies = Gson().fromJson(jsonDataMovie, collectionType)
+                    //movies = Gson().fromJson(jsonDataMovie, collectionType)
+                    movies = Gson().fromJson(jsonDataMovie,collectionType)
+
 
                     runOnUiThread {
                         pbLoading.visibility = View.GONE
                     }
                 }
+
+//                override fun onResponse(call: Call, response: Response) {
+//                    val json = response.body()!!.string()
+//                    val jsonObject = JSONObject(json)
+//                    val jsonDataMovie = jsonObject.get("recipe").toString()
+//
+//                    val collectionType = object : TypeToken<Movie>() {}.type
+//                    val mMovile = Gson().fromJson(jsonDataMovie, collectionType) as Movie
+//                    Log.e("KHTN: ", "${mMovile.title} and ${mMovile.imageUrl}" )
+//                    runOnUiThread {
+//                        pbLoading.visibility = View.GONE
+//                    }
+//                }
 
             })
     }
@@ -113,7 +129,7 @@ class MainActivity : AppCompatActivity(){
         pbLoading.visibility = View.VISIBLE
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("https://www.food2fork.com/api/get?key=fdbcae6f61c0ed7f252ec35be2fd561e&rId=35382")
+            .url("https://www.food2fork.com/api/search?key=e73c57efde785b199177c068778d720e&q=shredded%20chicken")
             .build()
 
         client.newCall(request)
@@ -124,10 +140,12 @@ class MainActivity : AppCompatActivity(){
                     }
                 }
 
+
                 override fun onResponse(call: Call, response: Response) {
                     val json = response.body()!!.string()
                     val jsonObject = JSONObject(json)
-                    val jsonDataMovie = jsonObject.get("recipe").toString()
+                    val jsonDataMovie = jsonObject.get("recipes").toString()
+
 
                     val collectionType = object : TypeToken<Collection<Movie>>(){}.type
 
@@ -137,6 +155,19 @@ class MainActivity : AppCompatActivity(){
                         pbLoading.visibility = View.GONE
                     }
                 }
+//                override fun onResponse(call: Call, response: Response) {
+//                    val json = response.body()!!.string()
+//                    val jsonObject = JSONObject(json)
+//                    val jsonDataMovie = jsonObject.get("recipe").toString()
+//
+//                    val collectionType = object : TypeToken<Movie>() {}.type
+//                    val mMovile = Gson().fromJson(jsonDataMovie, collectionType) as Movie
+//                    Log.e("KHTN 2 : ", "${mMovile.title} and ${mMovile.imageUrl}" )
+//
+//                    runOnUiThread {
+//                        pbLoading.visibility = View.GONE
+//                    }
+//                }
             })
     }
 }

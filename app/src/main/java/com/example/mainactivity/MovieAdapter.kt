@@ -24,7 +24,7 @@ class MovieAdapter (var items: ArrayList<Movie>, val context: Context): Recycler
         //movieViewHolder.tvDetail.text = items[position].overview
         // Glide
         Glide.with(context)
-            .load("https://www.food2fork.com/api/get?key=fdbcae6f61c0ed7f252ec35be2fd561e&rId=35382" + items[position].imageUrl)
+            .load(items[position].image_url)
             .centerCrop()
             .override(430,600)
             .into(movieViewHolder.imgView)

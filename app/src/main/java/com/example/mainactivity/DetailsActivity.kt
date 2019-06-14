@@ -26,7 +26,7 @@ class DetailsActivity : AppCompatActivity() {
             //tv_release_date.text = "Release date: " + movie.release_date
 
             Glide.with(this)
-            .load("https://www.food2fork.com/api/get?key=fdbcae6f61c0ed7f252ec35be2fd561e&rId=35382" + movie.imageUrl)
+            .load("https://www.food2fork.com/api/get?key=fdbcae6f61c0ed7f252ec35be2fd561e&rId=35382" + movie.image_url)
             .centerCrop()
             .override(800,1000)
             .into(img_movie)

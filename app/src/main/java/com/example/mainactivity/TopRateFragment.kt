@@ -36,7 +36,7 @@ class TopRateFragment: Fragment(), OnDataToFragmentListener {
         override fun onItemCLicked(position: Int) {
             val intent = Intent(activity, DetailsActivity:: class.java)
             val item = movies[position]
-            intent.putExtra(MOVIE_MODEL_KEY, MovieModel(item.title, item.imageUrl))
+            intent.putExtra(MOVIE_MODEL_KEY, MovieModel(item.title, item.image_url))
             startActivity(intent)
         }
 
